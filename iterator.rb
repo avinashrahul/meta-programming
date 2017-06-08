@@ -114,8 +114,18 @@ puts foo.method2
 
 foobar = Foo.new
 foobar.method1 # Gives o/p
-foobar.method2 # Throws error
+# foobar.method2 # Throws error
 
 ########
 
+# Get all combinations in an array which sums to an input value
+
+class Combination
+  def get_pairs(arr, input)
+    Array(arr).combination(2).select{|i, j| i + j == input} || []
+  end
+end
+
+arr = [0, 1, 100, 99, 0, 10, 90, 30, 55, 33, 55, 75]
+print c = Combination.new.get_pairs(arr, 100) # Returns [[0, 100], [1, 99], [100, 0], [10, 90]]
 
