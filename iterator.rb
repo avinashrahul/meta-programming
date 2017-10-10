@@ -1,131 +1,25 @@
-# Using Define Method create new mwthods
+require 'pry'
+def cal_arr_multi(a1, a2)
+  a1_size = a1.size
+  a2_size = a2.size
+  i = -1
+  if a1_size > a2_size
+    final_size = a2_size
+  end
+  output = []
+  a1.each_with_index do |ele, index|
+    index = index <= (final_size - 1) ? index : reset_offset(index, final_size)
+    output.push(ele * a2[index])
+  end
+  print output
+end
 
-class Iterator
-  class << self
-    define_method :my_each do |arr|
-      puts arr
-    end
+def reset_offset(index, final_size)
+  if index > final_size
+     i = i +1
   end
 end
 
-arr = [1, 2, 3]
+cal_arr_multi([1, 2, 3, 5], [3, 4])
 
-Iterator.my_each(arr)
-
-# If we use instance_eval or class_eval no define_method
-
-Iteratorr = Iterator.new
-
-#===============================
-
-# Using Class Eval
-
-foo = Class.new
-foo.class_eval do
-  def this_is_class
-    puts "This is Class Eval"
-  end
-end
-
-foo.new.this_is_class
-
-# Using Instance Eval
-
-foo.instance_eval do
-  def this_is_instance
-    puts "This is Instance Eval"
-  end
-end
-
-foo.this_is_instance
-
-############
-
-# Using Yield - Yield always evaluates the block, Yield is a magical keyword and not a method
-
-foo.instance_eval do
-  def this_is_yield
-    yield
-  end
-end
-
-foo.this_is_yield {puts "hello this is yield #{2 + 3}"}
-
-###########
-
-foo.instance_eval do
-  def this_is_yield_with_args(a, b)
-    puts "This is yield with arguments #{yield(a, b)}"
-  end
-end
-
-foo.this_is_yield_with_args(2, 3) {|a, b| a + b}
-
-##########
-
-# Add a new method to sting to split into words since string do not have that capabilty.
-
-class String
-  def words
-    split(' ')
-  end
-end
-
-"Programmer Best Friend".words
-#['Programmer', 'Best', 'Friend']
-
-class Integer
-  def factorial
-    (1..self).inject(&:*) || 1
-  end
-end
-
-5.factorial #Gives factorial. remember self here.
-
-########
-
-# Method Missing. It accepts method_name, list of args, block as arguments
-
-class Hello
-  def method_missing(method_name, *args, &block)
-    puts "There is no such method - #{method_name}"
-  end
-end
-
-Hello.new.ruby
-
-#########
-
-# Singleton class - Method belongs to specific object in a class
-
-class Foo
-  def method1
-    puts "method1"
-  end
-end
-
-foo = Foo.new
-
-def foo.method2
-  puts "This is Singleton Method and can only be accessible with foo object"
-end
-
-puts foo.method2
-
-foobar = Foo.new
-foobar.method1 # Gives o/p
-# foobar.method2 # Throws error
-
-########
-
-# Get all combinations in an array which sums to an input value
-
-class Combination
-  def get_pairs(arr, input)
-    Array(arr).combination(2).select{|i, j| i + j == input} || []
-  end
-end
-
-arr = [0, 1, 100, 99, 0, 10, 90, 30, 55, 33, 55, 75]
-print c = Combination.new.get_pairs(arr, 100) # Returns [[0, 100], [1, 99], [100, 0], [10, 90]]
-
+# o/p - [3, 8, 9, 20]
